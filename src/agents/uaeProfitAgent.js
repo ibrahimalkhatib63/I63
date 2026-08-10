@@ -43,9 +43,10 @@ function estimateUaeProfitability(listing, pricingResult) {
   const customsDutyUSD = round2(cifValueUSD * UAE_CUSTOMS_DUTY_RATE);
 
   const uaeDemandMultiplier = findUaeDemandMultiplier(listing.make, listing.model, listing.type);
-  const cleanValueBeforeDemand =
-    pricingResult.breakdown.ageAdjustedValue +
-    pricingResult.breakdown.mileageAdjustment;
+  const cleanValueBeforeDemand = Math.max(
+    0,
+    pricingResult.breakdown.ageAdjustedValue + pricingResult.breakdown.mileageAdjustment
+  );
   const uaeCleanResaleValueUSD = round2(
     cleanValueBeforeDemand * pricingResult.breakdown.conditionMultiplier * uaeDemandMultiplier
   );
