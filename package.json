@@ -1,0 +1,24 @@
+{
+  "name": "i63",
+  "version": "1.0.0",
+  "description": "A MARKET PLACE FOR CAR SERVICES",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibrahimalkhatib63/I63.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ibrahimalkhatib63/I63/issues"
+  },
+  "homepage": "https://github.com/ibrahimalkhatib63/I63#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
