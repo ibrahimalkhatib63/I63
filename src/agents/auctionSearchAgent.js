@@ -26,14 +26,18 @@ function matchesYear(listing, { year, minYear, maxYear }) {
  * The listing source (currently seeded sample data) is isolated in
  * src/data/auctionListings.js so it can be swapped for a live API or
  * scraper without changing this search/pricing interface.
+ *
+ * By default, auctions that have already ended (auctionEndTime in the
+ * past) are excluded; pass includeEnded: true to include them anyway.
  */
-function searchAuctions({ make, model, type, year, minYear, maxYear, auctionHouse } = {}) {
+function searchAuctions({ make, model, type, year, minYear, maxYear, auctionHouse, includeEnded, now = new Date() } = {}) {
   const matches = AUCTION_LISTINGS.filter((listing) => {
     if (type && listing.type !== type) return false;
     if (!matchesText(listing.make, make)) return false;
     if (!matchesText(listing.model, model)) return false;
     if (!matchesYear(listing, { year, minYear, maxYear })) return false;
     if (!matchesText(listing.auctionHouse, auctionHouse)) return false;
+    if (!includeEnded && new Date(listing.auctionEndTime) <= now) return false;
     return true;
   });
 

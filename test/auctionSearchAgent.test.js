@@ -19,10 +19,23 @@ test('filters by vehicle type (motorcycle) and excludes cars', () => {
   assert.ok(results.every((r) => r.type === 'motorcycle'));
 });
 
-test('rejects an invalid type value gracefully by returning no matches', () => {
+test('returns no matches for a make that does not exist in any listing', () => {
   const { results, count } = searchAuctions({ make: 'DoesNotExist' });
   assert.equal(count, 0);
   assert.deepEqual(results, []);
+});
+
+test('excludes auctions that have already ended, unless includeEnded is set', () => {
+  const now = new Date('2026-08-10T00:00:00Z');
+  const ended = searchAuctions({ make: 'Toyota', model: 'Camry', now });
+  assert.ok(ended.results.every((r) => new Date(r.auctionEndTime) > now));
+
+  const past = new Date('2100-01-01T00:00:00Z');
+  const excluded = searchAuctions({ make: 'Toyota', model: 'Camry', now: past });
+  assert.equal(excluded.count, 0);
+
+  const included = searchAuctions({ make: 'Toyota', model: 'Camry', now: past, includeEnded: true });
+  assert.ok(included.count > 0);
 });
 
 test('each result includes which auction house it is in and a recommended bid', () => {

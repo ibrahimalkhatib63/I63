@@ -5,7 +5,15 @@
  * well-known auction houses. This stands in for a live data source (a
  * scraper or partner API) — see src/agents/auctionSearchAgent.js for how
  * to plug a real source in without changing the search/pricing API.
+ *
+ * auctionEndTime is computed relative to module load time (rather than a
+ * fixed calendar date) so this sample data never "expires" — see
+ * endingInDays() below.
  */
+function endingInDays(days) {
+  return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+}
+
 const AUCTION_LISTINGS = [
   {
     id: 'CP-10021',
@@ -21,7 +29,7 @@ const AUCTION_LISTINGS = [
     location: 'Dallas, TX',
     currentBid: 9200,
     numBids: 14,
-    auctionEndTime: '2026-08-14T18:00:00Z',
+    auctionEndTime: endingInDays(4),
   },
   {
     id: 'IAAI-55211',
@@ -37,7 +45,7 @@ const AUCTION_LISTINGS = [
     location: 'Phoenix, AZ',
     currentBid: 15800,
     numBids: 22,
-    auctionEndTime: '2026-08-12T20:30:00Z',
+    auctionEndTime: endingInDays(2),
   },
   {
     id: 'MH-77890',
@@ -53,7 +61,7 @@ const AUCTION_LISTINGS = [
     location: 'Atlanta, GA',
     currentBid: 17250,
     numBids: 9,
-    auctionEndTime: '2026-08-16T17:00:00Z',
+    auctionEndTime: endingInDays(6),
   },
   {
     id: 'CB-30044',
@@ -69,7 +77,7 @@ const AUCTION_LISTINGS = [
     location: 'Los Angeles, CA',
     currentBid: 21500,
     numBids: 31,
-    auctionEndTime: '2026-08-13T23:00:00Z',
+    auctionEndTime: endingInDays(3),
   },
   {
     id: 'BAT-90211',
@@ -85,7 +93,7 @@ const AUCTION_LISTINGS = [
     location: 'Miami, FL',
     currentBid: 42000,
     numBids: 48,
-    auctionEndTime: '2026-08-18T22:00:00Z',
+    auctionEndTime: endingInDays(8),
   },
   {
     id: 'CP-10099',
@@ -101,7 +109,7 @@ const AUCTION_LISTINGS = [
     location: 'Sacramento, CA',
     currentBid: 19800,
     numBids: 17,
-    auctionEndTime: '2026-08-15T16:00:00Z',
+    auctionEndTime: endingInDays(5),
   },
   {
     id: 'IAAI-55388',
@@ -117,7 +125,7 @@ const AUCTION_LISTINGS = [
     location: 'Denver, CO',
     currentBid: 23100,
     numBids: 19,
-    auctionEndTime: '2026-08-11T19:00:00Z',
+    auctionEndTime: endingInDays(1),
   },
   {
     id: 'MH-77965',
@@ -133,7 +141,7 @@ const AUCTION_LISTINGS = [
     location: 'Chicago, IL',
     currentBid: 20200,
     numBids: 11,
-    auctionEndTime: '2026-08-17T15:00:00Z',
+    auctionEndTime: endingInDays(7),
   },
   {
     id: 'CB-30177',
@@ -149,7 +157,7 @@ const AUCTION_LISTINGS = [
     location: 'Seattle, WA',
     currentBid: 24900,
     numBids: 26,
-    auctionEndTime: '2026-08-14T21:00:00Z',
+    auctionEndTime: endingInDays(4),
   },
   {
     id: 'CP-10145',
@@ -165,7 +173,7 @@ const AUCTION_LISTINGS = [
     location: 'Portland, OR',
     currentBid: 11400,
     numBids: 8,
-    auctionEndTime: '2026-08-19T18:00:00Z',
+    auctionEndTime: endingInDays(9),
   },
 
   // Motorcycles
@@ -183,7 +191,7 @@ const AUCTION_LISTINGS = [
     location: 'Austin, TX',
     currentBid: 6200,
     numBids: 12,
-    auctionEndTime: '2026-08-13T18:00:00Z',
+    auctionEndTime: endingInDays(3),
   },
   {
     id: 'IAAI-M6612',
@@ -199,7 +207,7 @@ const AUCTION_LISTINGS = [
     location: 'Orlando, FL',
     currentBid: 8300,
     numBids: 20,
-    auctionEndTime: '2026-08-12T17:00:00Z',
+    auctionEndTime: endingInDays(2),
   },
   {
     id: 'CB-M7712',
@@ -215,7 +223,7 @@ const AUCTION_LISTINGS = [
     location: 'San Diego, CA',
     currentBid: 13500,
     numBids: 25,
-    auctionEndTime: '2026-08-16T20:00:00Z',
+    auctionEndTime: endingInDays(6),
   },
   {
     id: 'MH-M8890',
@@ -231,7 +239,7 @@ const AUCTION_LISTINGS = [
     location: 'Charlotte, NC',
     currentBid: 6100,
     numBids: 7,
-    auctionEndTime: '2026-08-15T19:00:00Z',
+    auctionEndTime: endingInDays(5),
   },
   {
     id: 'CP-M4177',
@@ -247,7 +255,7 @@ const AUCTION_LISTINGS = [
     location: 'Las Vegas, NV',
     currentBid: 5900,
     numBids: 16,
-    auctionEndTime: '2026-08-11T21:00:00Z',
+    auctionEndTime: endingInDays(1),
   },
   {
     id: 'BAT-M9001',
@@ -263,7 +271,7 @@ const AUCTION_LISTINGS = [
     location: 'Boston, MA',
     currentBid: 9200,
     numBids: 21,
-    auctionEndTime: '2026-08-18T18:30:00Z',
+    auctionEndTime: endingInDays(8),
   },
 ];
 
