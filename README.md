@@ -37,8 +37,29 @@ Query parameters (all optional, combine as needed):
 | `auctionHouse` | `Copart`        | Restrict to a specific auction house       |
 
 Each result includes which auction house it's listed in, the current bid,
-and a `pricing` object with the estimated fair market value, a recommended
-maximum bid, and a full breakdown of how it was calculated.
+a `pricing` object with the estimated fair market value, a recommended
+maximum bid, and a full breakdown of how it was calculated, and a
+`uaeMarketEstimate` object indicating whether importing and reselling that
+specific vehicle in the UAE (assuming it's won at its recommended max bid)
+looks profitable, marginal, or not worth it — see below.
+
+### UAE import/resale profitability estimate
+
+For every result, `uaeMarketEstimate` (see `src/agents/uaeProfitAgent.js`)
+estimates:
+
+- an indicative UAE clean resale value (using heuristic per-model UAE
+  demand multipliers in `src/data/uaeMarketAdjustments.js`, not live market
+  data),
+- the total landed cost in the UAE: purchase price (capped at the
+  recommended max bid) + auction fees + shipping + 5% UAE customs duty +
+  reconditioning/retitle costs for any reported damage or non-clean title,
+- the resulting profit in USD and AED (AED figures use the UAE's fixed USD
+  peg of 3.6725), and
+- a `status` of `profitable`, `marginal`, or `not-profitable`.
+
+This is a heuristic estimate for guidance only — swap in real UAE market
+comps and shipping/customs quotes for production use.
 
 ### Tests
 

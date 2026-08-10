@@ -2,6 +2,7 @@
 
 const { AUCTION_LISTINGS } = require('../data/auctionListings');
 const { evaluateBiddingPrice } = require('./biddingPriceAgent');
+const { estimateUaeProfitability } = require('./uaeProfitAgent');
 
 const RECOMMENDATION_RANK = { 'good-value': 0, 'near-recommended-max': 1, 'above-recommended-max': 2 };
 
@@ -36,10 +37,10 @@ function searchAuctions({ make, model, type, year, minYear, maxYear, auctionHous
     return true;
   });
 
-  const results = matches.map((listing) => ({
-    ...listing,
-    pricing: evaluateBiddingPrice(listing),
-  }));
+  const results = matches.map((listing) => {
+    const pricing = evaluateBiddingPrice(listing);
+    return { ...listing, pricing, uaeMarketEstimate: estimateUaeProfitability(listing, pricing) };
+  });
 
   results.sort((a, b) => {
     const rankDiff = RECOMMENDATION_RANK[a.pricing.recommendation] - RECOMMENDATION_RANK[b.pricing.recommendation];
