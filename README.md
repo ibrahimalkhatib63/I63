@@ -19,10 +19,17 @@ can be swapped in later without changing the search/pricing interface.
 ```bash
 npm install
 npm start
-# then, in another terminal:
+# then open http://localhost:3000/ for the Arabic search UI (public/index.html),
+# or query the JSON API directly:
 curl "http://localhost:3000/api/auctions/search?make=Toyota&model=Camry"
 curl "http://localhost:3000/api/auctions/search?type=motorcycle"
 ```
+
+`http://localhost:3000/` serves a full right-to-left Arabic web page
+(`public/index.html`) with search filters and a card per result showing the
+bidding recommendation and full UAE import/resale expense breakdown, all in
+Arabic. It's a static page that calls the JSON API below — the API itself
+stays in English.
 
 Query parameters (all optional, combine as needed):
 
