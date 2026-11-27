@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>وكيل مزادات السيارات والدراجات النارية</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #16213e;
+    --panel-2: #1c2b4a;
+    --border: #2a3a5c;
+    --text: #e7ecf7;
+    --muted: #9fb0cf;
+    --accent: #4da3ff;
+    --green: #35c470;
+    --yellow: #e8b93f;
+    --red: #ff5c6c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    padding: 24px 20px 12px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.6rem; }
+  header p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+  form.filters {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    align-items: end;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 0.8rem; color: var(--muted); }
+  .field input, .field select {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  .field.checkbox { flex-direction: row; align-items: center; gap: 8px; }
+  button.search-btn {
+    background: var(--accent);
+    color: #05172f;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+  button.search-btn:hover { filter: brightness(1.1); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+  #status { text-align: center; color: var(--muted); margin: 20px 0; }
+
+  .cards { display: grid; gap: 16px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .card-head h3 { margin: 0; font-size: 1.1rem; }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .badge.good { background: rgba(53,196,112,0.15); color: var(--green); }
+  .badge.mid { background: rgba(232,185,63,0.15); color: var(--yellow); }
+  .badge.bad { background: rgba(255,92,108,0.15); color: var(--red); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px 18px;
+    font-size: 0.9rem;
+  }
+  .grid .item .k { color: var(--muted); font-size: 0.78rem; margin-bottom: 2px; }
+  .grid .item .v { font-weight: 600; }
+
+  .section-title {
+    margin: 14px 0 8px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+  }
+
+  details summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+  table.breakdown {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
+  table.breakdown td { padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  table.breakdown td:last-child { text-align: left; font-weight: 600; }
+
+  .note { color: var(--muted); font-size: 0.75rem; margin-top: 10px; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🚗🏍️ وكيل مزادات السيارات والدراجات النارية</h1>
+  <p>ابحث عن السيارة أو الدراجة، وشوف بأي مزاد موجودة، وأعلى سعر مقترح للمزايدة، وهل فيه ربح لو استوردتها للإمارات</p>
+</header>
+
+<form class="filters" id="filters">
+  <div class="field">
+    <label for="type">النوع</label>
+    <select id="type" name="type">
+      <option value="">الكل</option>
+      <option value="car">سيارة</option>
+      <option value="motorcycle">دراجة نارية</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="make">الماركة</label>
+    <input id="make" name="make" placeholder="مثال: Toyota" />
+  </div>
+  <div class="field">
+    <label for="model">الموديل</label>
+    <input id="model" name="model" placeholder="مثال: Camry" />
+  </div>
+  <div class="field">
+    <label for="minYear">من سنة</label>
+    <input id="minYear" name="minYear" type="number" placeholder="2015" />
+  </div>
+  <div class="field">
+    <label for="maxYear">إلى سنة</label>
+    <input id="maxYear" name="maxYear" type="number" placeholder="2024" />
+  </div>
+  <div class="field">
+    <label for="auctionHouse">دار المزاد</label>
+    <input id="auctionHouse" name="auctionHouse" placeholder="مثال: Copart" />
+  </div>
+  <div class="field checkbox">
+    <input id="includeEnded" name="includeEnded" type="checkbox" />
+    <label for="includeEnded">إظهار المزادات المنتهية</label>
+  </div>
+  <div class="field">
+    <button class="search-btn" type="submit">بحث</button>
+  </div>
+</form>
+
+<main>
+  <div id="status"></div>
+  <div id="results" class="cards"></div>
+</main>
+
+<script>
+const AR = {
+  type: { car: 'سيارة', motorcycle: 'دراجة نارية' },
+  damage: { none: 'بدون ضرر', minor: 'ضرر بسيط', moderate: 'ضرر متوسط', major: 'ضرر كبير' },
+  titleStatus: { clean: 'نظيفة', rebuilt: 'معاد بناؤها', salvage: 'تالفة (سالفج)', flood: 'غمرتها المياه' },
+  recommendation: {
+    'good-value': 'سعر جيد',
+    'near-recommended-max': 'قريب من الحد الأقصى',
+    'above-recommended-max': 'فوق الحد الأقصى',
+  },
+  profitStatus: { profitable: 'مربح', marginal: 'هامش ضعيف', 'not-profitable': 'غير مربح' },
+};
+
+function fmtUsd(n) {
+  return '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+function fmtAed(n) {
+  return Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }) + ' درهم';
+}
+function badgeClass(status) {
+  if (status === 'profitable' || status === 'good-value') return 'good';
+  if (status === 'marginal' || status === 'near-recommended-max') return 'mid';
+  return 'bad';
+}
+
+function renderCard(r) {
+  const p = r.pricing;
+  const u = r.uaeMarketEstimate;
+  const b = u.breakdown;
+  const endDate = new Date(r.auctionEndTime).toLocaleString('ar-AE');
+
+  return `
+    <div class="card">
+      <div class="card-head">
+        <h3>${r.year} ${r.make} ${r.model} <span style="color:var(--muted);font-weight:400;font-size:0.8rem">(${AR.type[r.type] || r.type})</span></h3>
+        <span class="badge ${badgeClass(u.status)}">${AR.profitStatus[u.status] || u.status}</span>
+      </div>
+
+      <div class="grid">
+        <div class="item"><div class="k">دار المزاد</div><div class="v">${r.auctionHouse}</div></div>
+        <div class="item"><div class="k">الموقع</div><div class="v">${r.location}</div></div>
+        <div class="item"><div class="k">ينتهي</div><div class="v">${endDate}</div></div>
+        <div class="item"><div class="k">الممشى</div><div class="v">${Number(r.mileage).toLocaleString('en-US')}</div></div>
+        <div class="item"><div class="k">درجة الحالة</div><div class="v">${r.conditionGrade}/5</div></div>
+        <div class="item"><div class="k">الضرر</div><div class="v">${AR.damage[r.damage] || r.damage}</div></div>
+        <div class="item"><div class="k">حالة الملكية</div><div class="v">${AR.titleStatus[r.titleStatus] || r.titleStatus}</div></div>
+        <div class="item"><div class="k">المزايدة الحالية</div><div class="v">${fmtUsd(r.currentBid)}</div></div>
+      </div>
+
+      <div class="section-title">توصية المزايدة</div>
+      <div class="grid">
+        <div class="item"><div class="k">القيمة السوقية العادلة (أمريكا)</div><div class="v">${fmtUsd(p.estimatedMarketValue)}</div></div>
+        <div class="item"><div class="k">أعلى سعر مقترح للمزايدة</div><div class="v">${fmtUsd(p.recommendedMaxBid)}</div></div>
+        <div class="item"><div class="k">التوصية</div><div class="v">${AR.recommendation[p.recommendation] || p.recommendation}</div></div>
+      </div>
+
+      <div class="section-title">الاستيراد والبيع بالإمارات</div>
+      <div class="grid">
+        <div class="item"><div class="k">القيمة المتوقعة بالإمارات</div><div class="v">${fmtAed(u.uaeCleanResaleValueAED)} (${fmtUsd(u.uaeCleanResaleValueUSD)})</div></div>
+        <div class="item"><div class="k">إجمالي التكلفة</div><div class="v">${fmtAed(u.totalLandedCostAED)} (${fmtUsd(u.totalLandedCostUSD)})</div></div>
+        <div class="item"><div class="k">الربح / الخسارة</div><div class="v" style="color:${u.profitUSD >= 0 ? 'var(--green)' : 'var(--red)'}">${fmtAed(u.profitAED)} (${fmtUsd(u.profitUSD)})</div></div>
+        <div class="item"><div class="k">هامش الربح</div><div class="v">${u.profitMarginPercent}%</div></div>
+      </div>
+
+      <details>
+        <summary>تفاصيل كل المصاريف</summary>
+        <table class="breakdown">
+          <tr><td>سعر الشراء المفترض</td><td>${fmtUsd(b.purchasePriceUSD)}</td></tr>
+          <tr><td>رسوم المزاد (${b.auctionFeeSource === 'copart-fee-schedule' ? 'جدول Copart الحقيقي' : 'تقدير عام'})</td><td>${fmtUsd(b.auctionFeesUSD)}</td></tr>
+          <tr><td>الشحن للإمارات</td><td>${fmtUsd(b.shippingCostUSD)}</td></tr>
+          <tr><td>قيمة CIF (شراء + رسوم + شحن)</td><td>${fmtUsd(b.cifValueUSD)}</td></tr>
+          <tr><td>الجمارك الإماراتية (5%)</td><td>${fmtUsd(b.customsDutyUSD)}</td></tr>
+          <tr><td>ضريبة القيمة المضافة (5%)</td><td>${fmtUsd(b.vatUSD)}</td></tr>
+          <tr><td>تصليح/تجهيز (حسب الضرر)</td><td>${fmtUsd(b.reconditioningCostUSD)}</td></tr>
+          <tr><td>إعادة ترخيص (حسب حالة الملكية)</td><td>${fmtUsd(b.retitleCostUSD)}</td></tr>
+        </table>
+      </details>
+
+      <div class="note">تقدير تقريبي يعتمد على معاملات طلب افتراضية بسوق الإمارات وجدول رسوم Copart المُعاد بناؤه من مصادر عامة — مش بيانات سوق حية أو رسوم Copart الرسمية.</div>
+    </div>
+  `;
+}
+
+async function search(params) {
+  const statusEl = document.getElementById('status');
+  const resultsEl = document.getElementById('results');
+  statusEl.textContent = 'جارِ البحث...';
+  resultsEl.innerHTML = '';
+
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value) query.set(key, value);
+  }
+
+  try {
+    const res = await fetch('/api/auctions/search?' + query.toString());
+    const data = await res.json();
+    if (!res.ok) {
+      statusEl.textContent = 'خطأ: ' + (data.error || 'حدث خطأ غير متوقع');
+      return;
+    }
+    statusEl.textContent = `تم العثور على ${data.count} نتيجة في ${data.auctionHouses.length} دار مزاد: ${data.auctionHouses.join('، ') || '—'}`;
+    if (data.results.length === 0) {
+      resultsEl.innerHTML = '<div class="empty">ما في نتائج مطابقة، جرّب تعديل البحث</div>';
+      return;
+    }
+    resultsEl.innerHTML = data.results.map(renderCard).join('');
+  } catch (err) {
+    statusEl.textContent = 'تعذّر الاتصال بالخادم';
+  }
+}
+
+document.getElementById('filters').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = new FormData(e.target);
+  search({
+    type: form.get('type'),
+    make: form.get('make'),
+    model: form.get('model'),
+    minYear: form.get('minYear'),
+    maxYear: form.get('maxYear'),
+    auctionHouse: form.get('auctionHouse'),
+    includeEnded: document.getElementById('includeEnded').checked ? 'true' : '',
+  });
+});
+
+search({});
+</script>
+</body>
+</html>
